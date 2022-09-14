@@ -1,3 +1,4 @@
 import Home from './Home';
+import ShoppingCart from './ShoppingCart';
 
-export default { Home };
+export { Home, ShoppingCart };
