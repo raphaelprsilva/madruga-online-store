@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Layout from '../../components/Layout/index';
 import ProductCategories from '../../components/ProductCategories';
+import ProductsList from '../../components/ProductsList';
+import Search from '../../components/Search';
 import { getProductsFromCategoryAndQuery } from '../../services/api';
 
 class Home extends Component {
@@ -48,51 +50,13 @@ class Home extends Component {
         <span data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </span>
-        <form onSubmit={ this.handleSubmit }>
-          <div>
-            <input
-              name="productQuery"
-              value={ productQuery }
-              onChange={ this.handleChange }
-              data-testid="query-input"
-              id="search-procuct"
-              type="text"
-              title="Nome do produto"
-            />
-            <button
-              data-testid="query-button"
-              type="submit"
-              title="Pesquisar produto"
-            >
-              Pesquisar Produto
-            </button>
-          </div>
-        </form>
+        <Search
+          handleChange={ this.handleChange }
+          handleSubmit={ this.handleSubmit }
+          productQuery={ productQuery }
+        />
         <ProductCategories />
-        <section>
-          {!loading ? (
-            <section>
-              {!products.length ? (
-                <span>Nenhum produto foi encontrado</span>
-              ) : (
-                <div>
-                  {products.map(({ id, title, thumbnail, price }) => (
-                    <div key={ id } data-testid="product">
-                      <img src={ thumbnail } alt={ title } />
-                      <p>{title}</p>
-                      <p>
-                        R$
-                        {price}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          ) : (
-            <div>loading...</div>
-          )}
-        </section>
+        <ProductsList loading={ loading } products={ products } />
       </Layout>
     );
   }
