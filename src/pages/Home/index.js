@@ -3,7 +3,10 @@ import Layout from '../../components/Layout/index';
 import ProductCategories from '../../components/ProductCategories';
 import ProductsList from '../../components/ProductsList';
 import Search from '../../components/Search';
-import { getProductsFromCategoryAndQuery } from '../../services/api';
+import {
+  getProductsFromCategoryAndQuery,
+  getCategories,
+} from '../../services/api';
 
 class Home extends Component {
   constructor(props) {
@@ -12,11 +15,19 @@ class Home extends Component {
     this.state = {
       loading: false,
       products: [],
+      productsCategories: [],
       productQuery: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.getProductsCategories = this.getProductsCategories.bind(this);
+    this.getProductsFromCategory = this.getProductsFromCategory.bind(this);
+  }
+
+  componentDidMount() {
+    this.getProductsCategories();
   }
 
   handleChange({ target }) {
@@ -25,6 +36,10 @@ class Home extends Component {
     this.setState({
       [name]: value,
     });
+  }
+
+  handleClick({ target }) {
+    this.getProductsFromCategory(target);
   }
 
   handleSubmit(event) {
@@ -38,12 +53,32 @@ class Home extends Component {
         productQuery,
       );
       const { results } = productsData;
-      this.setState({ loading: false, products: results });
+      this.setState({ loading: false, products: results, productQuery: '' });
+    });
+  }
+
+  async getProductsFromCategory(target) {
+    const categoryId = target.dataset.productId;
+    this.setState({ loading: true }, async () => {
+      const products = await getProductsFromCategoryAndQuery(categoryId, '');
+      this.setState({ loading: false, products: products.results });
+    });
+  }
+
+  async getProductsCategories() {
+    this.setState({ loading: true }, async () => {
+      const categories = await getCategories();
+      this.setState({ loading: false, productsCategories: categories });
     });
   }
 
   render() {
-    const { productQuery, products, loading } = this.state;
+    const {
+      productsCategories,
+      productQuery,
+      products,
+      loading,
+    } = this.state;
 
     return (
       <Layout>
@@ -55,7 +90,11 @@ class Home extends Component {
           handleSubmit={ this.handleSubmit }
           productQuery={ productQuery }
         />
-        <ProductCategories />
+        <ProductCategories
+          loading={ loading }
+          productsCategories={ productsCategories }
+          fetchProductsCategories={ this.handleClick }
+        />
         <ProductsList loading={ loading } products={ products } />
       </Layout>
     );

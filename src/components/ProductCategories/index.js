@@ -1,30 +1,9 @@
 import React, { Component } from 'react';
-import { getCategories } from '../../services/api';
+import PropTypes from 'prop-types';
 
 class ProductCategories extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      productsCategories: [],
-    };
-    this.getProductsCategories = this.getProductsCategories.bind(this);
-  }
-
-  componentDidMount() {
-    this.getProductsCategories();
-  }
-
-  async getProductsCategories() {
-    this.setState({ loading: true }, async () => {
-      const categories = await getCategories();
-      this.setState({ loading: false, productsCategories: categories });
-    });
-  }
-
   render() {
-    const { loading, productsCategories } = this.state;
+    const { loading, productsCategories, fetchProductsCategories } = this.props;
 
     return (
       <section>
@@ -32,7 +11,12 @@ class ProductCategories extends Component {
           <aside>
             {productsCategories.map(({ id, name }) => (
               <div key={ id }>
-                <button type="button" data-testid="category">
+                <button
+                  type="button"
+                  data-testid="category"
+                  data-product-id={ id }
+                  onClick={ fetchProductsCategories }
+                >
                   {name}
                 </button>
               </div>
@@ -45,5 +29,15 @@ class ProductCategories extends Component {
     );
   }
 }
+
+ProductCategories.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  fetchProductsCategories: PropTypes.func.isRequired,
+  productsCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      map: PropTypes.func,
+    }),
+  ).isRequired,
+};
 
 export default ProductCategories;
