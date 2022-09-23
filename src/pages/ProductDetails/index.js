@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Layout } from '../../components';
 import { getProductById } from '../../services/api';
+import ProductCard from '../../components/ProductCard';
 
 export default class ProductDetails extends Component {
   constructor(props) {
@@ -38,20 +39,17 @@ export default class ProductDetails extends Component {
       price,
       available_quantity: avaliableQty,
     } = productDetails;
+
     return (
       <Layout>
         <section>
           {!loading ? (
-            <div>
-              <div>
-                <img src={ thumbnail } alt={ title } />
-              </div>
-              <div>
-                <div data-testid="product-detail-name">{title}</div>
-                <div>{price}</div>
-                <div>{avaliableQty}</div>
-              </div>
-            </div>
+            <ProductCard
+              thumbnail={ thumbnail }
+              title={ title }
+              price={ price }
+              avaliableQty={ avaliableQty }
+            />
           ) : (
             <div>loading...</div>
           )}
