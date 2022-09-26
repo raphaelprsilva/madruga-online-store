@@ -73,12 +73,7 @@ class Home extends Component {
   }
 
   render() {
-    const {
-      productsCategories,
-      productQuery,
-      products,
-      loading,
-    } = this.state;
+    const { productsCategories, productQuery, products, loading } = this.state;
 
     return (
       <Layout>
