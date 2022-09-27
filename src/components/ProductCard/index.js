@@ -13,6 +13,7 @@ export default class ProductCard extends Component {
           <div data-testid="product-detail-name">{title}</div>
           <div>{price}</div>
           <div>{avaliableQty}</div>
+          <button type="button">Adicionar ao carrinho</button>
         </div>
       </div>
     );

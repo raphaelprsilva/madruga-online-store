@@ -9,10 +9,12 @@ export default class ProductListItem extends Component {
       thumbnail,
       title,
       price,
-      handleClick,
+      addProduct,
       qtyShoppingCart,
+      testIdAddToCard,
       testIdProductName,
       testIdQuantity,
+      avaliableQty,
     } = this.props;
 
     const renderQtyShoppingCart = qtyShoppingCart ? (
@@ -21,9 +23,15 @@ export default class ProductListItem extends Component {
         {' '}
         {qtyShoppingCart}
       </span>
-    ) : (
-      ''
-    );
+    ) : ('');
+    const renderAvaliableQty = avaliableQty ? (
+      <div>
+        Quantidade Disponível:
+        {' '}
+        { avaliableQty }
+      </div>
+    ) : ('');
+
     return (
       <div key={ id } data-testid="product" data-product-id={ id }>
         <img src={ thumbnail } alt={ title } />
@@ -33,10 +41,11 @@ export default class ProductListItem extends Component {
           {price}
         </p>
         {renderQtyShoppingCart}
+        {renderAvaliableQty}
         <button
-          onClick={ handleClick }
+          onClick={ addProduct }
           type="button"
-          data-testid="product-add-to-cart"
+          data-testid={ testIdAddToCard }
         >
           Adicionar ao carrinho
         </button>
@@ -49,18 +58,26 @@ export default class ProductListItem extends Component {
 }
 
 ProductListItem.defaultProps = {
+  id: '',
+  price: 0,
+  thumbnail: '',
+  title: '',
   qtyShoppingCart: 0,
-  testIdProductName: '',
-  testIdQuantity: '',
+  testIdAddToCard: 'product-add-to-cart',
+  testIdProductName: 'shopping-cart-product-name',
+  testIdQuantity: 'shopping-cart-product-quantity',
+  avaliableQty: 0,
 };
 
 ProductListItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
+  id: PropTypes.string,
+  price: PropTypes.number,
+  thumbnail: PropTypes.string,
+  title: PropTypes.string,
+  addProduct: PropTypes.func.isRequired,
   qtyShoppingCart: PropTypes.number,
   testIdProductName: PropTypes.string,
   testIdQuantity: PropTypes.string,
+  testIdAddToCard: PropTypes.string,
+  avaliableQty: PropTypes.number,
 };

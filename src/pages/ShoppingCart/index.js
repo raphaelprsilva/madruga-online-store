@@ -11,14 +11,20 @@ class ShoppingCart extends Component {
     };
 
     this.getProductsFromLocalStorage = this.getProductsFromLocalStorage.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.addProduct = this.addProduct.bind(this);
   }
 
   componentDidMount() {
     this.getProductsFromLocalStorage();
   }
 
-  handleClick({ target }) {
+  getProductsFromLocalStorage() {
+    const storageCartItems = localStorage.getItem('shoppingCartStorage');
+    const localStorageShoppingCart = JSON.parse(storageCartItems);
+    this.setState({ shoppingCart: localStorageShoppingCart });
+  }
+
+  addProduct({ target }) {
     const {
       parentElement: { dataset },
     } = target;
@@ -69,12 +75,6 @@ class ShoppingCart extends Component {
     }
   }
 
-  getProductsFromLocalStorage() {
-    const storageCartItems = localStorage.getItem('shoppingCartStorage');
-    const localStorageShoppingCart = JSON.parse(storageCartItems);
-    this.setState({ shoppingCart: localStorageShoppingCart });
-  }
-
   render() {
     const { shoppingCart } = this.state;
 
@@ -84,25 +84,25 @@ class ShoppingCart extends Component {
       </span>
     );
 
-    const cartItems = shoppingCart.map(
-      ({ id, title, thumbnail, price, qtyShoppingCart }) => (
-        <ProductListItem
-          key={ id }
-          id={ id }
-          title={ title }
-          price={ price }
-          thumbnail={ thumbnail }
-          qtyShoppingCart={ qtyShoppingCart }
-          testIdProductName="shopping-cart-product-name"
-          testIdQuantity="shopping-cart-product-quantity"
-          handleClick={ this.handleClick }
-        />
-      ),
-    );
-
     return (
       <Layout>
-        <section>{shoppingCart ? cartItems : emptyCart}</section>
+        <section>
+          {shoppingCart.length
+            ? shoppingCart.map(
+              ({ id, title, thumbnail, price, qtyShoppingCart }) => (
+                <ProductListItem
+                  key={ id }
+                  id={ id }
+                  title={ title }
+                  price={ price }
+                  thumbnail={ thumbnail }
+                  qtyShoppingCart={ qtyShoppingCart }
+                  addProduct={ this.addProduct }
+                />
+              ),
+            )
+            : emptyCart}
+        </section>
       </Layout>
     );
   }
