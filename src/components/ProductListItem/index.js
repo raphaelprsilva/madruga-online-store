@@ -2,23 +2,57 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import {
+  setProductsToLocalStorage,
+  getProductsFromLocalStorage,
+} from '../../services/localStorageProducts';
+
 export default class ProductListItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.addProductToCart = this.addProductToCart.bind(this);
+  }
+
+  addProductToCart() {
+    const { id, title, price, thumbnail } = this.props;
+    const localProducts = getProductsFromLocalStorage();
+    const foundProduct = localProducts.find((p) => p.id === id);
+
+    if (!foundProduct) {
+      const productDataToAdd = { id, title, price, thumbnail, quantity: 1 };
+      const localProductsUpdated = [...localProducts, productDataToAdd];
+      setProductsToLocalStorage(localProductsUpdated);
+    } else {
+      const localProductsUpdated = localProducts.map((p) => {
+        if (p.id === foundProduct.id) {
+          return {
+            ...p,
+            quantity: p.quantity + 1,
+          };
+        }
+        return p;
+      });
+      setProductsToLocalStorage(localProductsUpdated);
+    }
+  }
+
   render() {
     const {
       id,
       thumbnail,
       title,
       price,
-      addProduct,
-      qtyShoppingCart,
       testIdAddToCard,
+      qtyShoppingCart,
       testIdProductName,
-      testIdQuantity,
       avaliableQty,
+      showDeleteProductButton,
+      showProductsQty,
     } = this.props;
 
-    const renderQtyShoppingCart = qtyShoppingCart ? (
-      <span data-testid={ testIdQuantity }>
+    const renderQtyShoppingCart = showProductsQty ? (
+      <span data-testid="shopping-cart-product-quantity">
         Quantidade:
         {' '}
         {qtyShoppingCart}
@@ -28,8 +62,11 @@ export default class ProductListItem extends Component {
       <div>
         Quantidade Disponível:
         {' '}
-        { avaliableQty }
+        {avaliableQty}
       </div>
+    ) : ('');
+    const renderDeleteProductButton = showDeleteProductButton ? (
+      <button type="button">Remover Produto</button>
     ) : ('');
 
     return (
@@ -43,7 +80,7 @@ export default class ProductListItem extends Component {
         {renderQtyShoppingCart}
         {renderAvaliableQty}
         <button
-          onClick={ addProduct }
+          onClick={ this.addProductToCart }
           type="button"
           data-testid={ testIdAddToCard }
         >
@@ -52,6 +89,7 @@ export default class ProductListItem extends Component {
         <Link to={ `/products/${id}` } data-testid="product-detail-link">
           Ver detalhes do produto
         </Link>
+        {renderDeleteProductButton}
       </div>
     );
   }
@@ -65,8 +103,9 @@ ProductListItem.defaultProps = {
   qtyShoppingCart: 0,
   testIdAddToCard: 'product-add-to-cart',
   testIdProductName: 'shopping-cart-product-name',
-  testIdQuantity: 'shopping-cart-product-quantity',
   avaliableQty: 0,
+  showDeleteProductButton: false,
+  showProductsQty: false,
 };
 
 ProductListItem.propTypes = {
@@ -74,10 +113,10 @@ ProductListItem.propTypes = {
   price: PropTypes.number,
   thumbnail: PropTypes.string,
   title: PropTypes.string,
-  addProduct: PropTypes.func.isRequired,
   qtyShoppingCart: PropTypes.number,
   testIdProductName: PropTypes.string,
-  testIdQuantity: PropTypes.string,
   testIdAddToCard: PropTypes.string,
   avaliableQty: PropTypes.number,
+  showDeleteProductButton: PropTypes.bool,
+  showProductsQty: PropTypes.bool,
 };
