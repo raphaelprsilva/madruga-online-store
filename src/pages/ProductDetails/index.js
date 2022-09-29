@@ -6,7 +6,7 @@ import ProductListItem from '../../components/ProductListItem/index';
 
 import {
   getProductsFromLocalStorage,
-  setProductsToLocalStorage,
+  // setProductsToLocalStorage,
 } from '../../services/localStorageProducts';
 
 export default class ProductDetails extends Component {
@@ -19,7 +19,6 @@ export default class ProductDetails extends Component {
     };
 
     this.getProductDetails = this.getProductDetails.bind(this);
-    this.addProduct = this.addProduct.bind(this);
   }
 
   componentDidMount() {
@@ -36,32 +35,6 @@ export default class ProductDetails extends Component {
       const productData = await getProductById(productId);
       this.setState({ loading: false, productDetails: productData });
     });
-  }
-
-  addProduct({ target }) {
-    const localProducts = getProductsFromLocalStorage();
-    const { parentElement: { dataset } } = target;
-    const { productId } = dataset;
-    const productFound = localProducts.find(
-      (localProduct) => localProduct.id === productId,
-    );
-
-    if (!localProducts.length || !productFound) {
-      const { productDetails } = this.state;
-      const productToAdd = { ...productDetails, qtyShoppingCart: 1 };
-      const newItemToLocal = [...localProducts, productToAdd];
-      setProductsToLocalStorage(newItemToLocal);
-    } else {
-      const productToAdd = {
-        ...productFound,
-        qtyShoppingCart: productFound.qtyShoppingCart + 1,
-      };
-      const storageProductsUpdated = localProducts.map((localProduct) => {
-        if (localProduct.id === productFound.id) return productToAdd;
-        return localProduct;
-      });
-      setProductsToLocalStorage(storageProductsUpdated);
-    }
   }
 
   render() {
@@ -87,7 +60,6 @@ export default class ProductDetails extends Component {
               avaliableQty={ avaliableQty }
               testIdProductName="product-detail-name"
               testIdAddToCard="product-detail-add-to-cart"
-              addProduct={ this.addProduct }
             />
           ) : (
             <div>loading...</div>
