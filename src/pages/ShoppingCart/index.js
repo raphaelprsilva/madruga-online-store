@@ -51,7 +51,11 @@ class ShoppingCart extends Component {
     } = target;
     const localProducts = getProductsFromLocalStorage();
     const filteredItems = localProducts.filter((p) => p.id !== productId);
-    this.setState({ shoppingCart: filteredItems });
+    const totalPrice = filteredItems.reduce(
+      (acc, { price, quantity }) => acc + price * quantity,
+      0,
+    );
+    this.setState({ shoppingCart: filteredItems, totalPrice });
     setProductsToLocalStorage(filteredItems);
   }
 
