@@ -79,6 +79,7 @@ class ShoppingCart extends Component {
                 removeItem={ this.removeProduct }
                 getTotalPrice={ this.getTotalPrice }
                 showDeleteProductButton
+                showHandleQuantityButtons
               />
             ))
             : emptyCart}

@@ -63,7 +63,6 @@ export default class ProductListItem extends Component {
           .map((p) => this.handleProductQty(p, foundProduct, 'decrease'));
         setProductsToLocalStorage(localProductsUpdated);
         if (getTotalPrice) {
-          console.log('getTotalPrice foi chamado');
           getTotalPrice();
         }
       } else {
@@ -71,7 +70,6 @@ export default class ProductListItem extends Component {
           .map((p) => this.handleProductQty(p, foundProduct, 'increase'));
         setProductsToLocalStorage(localProductsUpdated);
         if (getTotalPrice) {
-          console.log('getTotalPrice foi chamado');
           getTotalPrice();
         }
       }
@@ -98,6 +96,7 @@ export default class ProductListItem extends Component {
       showDeleteProductButton,
       showProductsQty,
       showAddProductToCardButton,
+      showHandleQuantityButtons,
       removeItem,
     } = this.props;
 
@@ -127,6 +126,25 @@ export default class ProductListItem extends Component {
         Adicionar ao carrinho
       </button>
     ) : ('');
+    const renderProductQuantity = showHandleQuantityButtons ? (
+      <div>
+        <button
+          type="button"
+          data-testid="product-decrease-quantity"
+          onClick={ this.setProductQty }
+        >
+          -
+        </button>
+        <div data-testid="shopping-cart-product-quantity">{ productQuantity }</div>
+        <button
+          type="button"
+          data-testid="product-increase-quantity"
+          onClick={ this.setProductQty }
+        >
+          +
+        </button>
+      </div>
+    ) : ('');
 
     return (
       <div key={ id } data-testid="product" data-product-id={ id }>
@@ -138,23 +156,7 @@ export default class ProductListItem extends Component {
         </p>
         {renderQtyShoppingCart}
         {renderAvaliableQty}
-        <div>
-          <button
-            type="button"
-            data-testid="product-decrease-quantity"
-            onClick={ this.setProductQty }
-          >
-            -
-          </button>
-          <div data-testid="shopping-cart-product-quantity">{ productQuantity }</div>
-          <button
-            type="button"
-            data-testid="product-increase-quantity"
-            onClick={ this.setProductQty }
-          >
-            +
-          </button>
-        </div>
+        {renderProductQuantity}
         {renderAddProductCartButton}
         <Link to={ `/products/${id}` } data-testid="product-detail-link">
           Ver detalhes do produto
@@ -177,6 +179,7 @@ ProductListItem.defaultProps = {
   showDeleteProductButton: false,
   showProductsQty: false,
   showAddProductToCardButton: true,
+  showHandleQuantityButtons: false,
   removeItem: null,
   getTotalPrice: null,
 };
@@ -193,6 +196,7 @@ ProductListItem.propTypes = {
   showDeleteProductButton: PropTypes.bool,
   showProductsQty: PropTypes.bool,
   showAddProductToCardButton: PropTypes.bool,
+  showHandleQuantityButtons: PropTypes.bool,
   removeItem: PropTypes.func,
   getTotalPrice: PropTypes.func,
 };
