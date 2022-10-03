@@ -1,0 +1,14 @@
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.on {
+  color: black;
+}
+
+.off {
+  color: #ccc;
+}
