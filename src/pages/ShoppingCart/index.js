@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import { Layout } from '../../components';
 import ProductListItem from '../../components/ProductListItem';
 import {
@@ -91,6 +93,16 @@ class ShoppingCart extends Component {
         <section>
           <p>Total</p>
           <span>{totalPrice}</span>
+        </section>
+        <section>
+          <Link to="/checkout">
+            <button
+              type="button"
+              data-testid="checkout-products"
+            >
+              Finalizar Compra
+            </button>
+          </Link>
         </section>
       </Layout>
     );
