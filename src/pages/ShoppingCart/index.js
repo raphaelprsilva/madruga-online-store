@@ -20,6 +20,7 @@ class ShoppingCart extends Component {
     this.getProductsFromLocalStorage = this.getProductsFromLocalStorage.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
+    this.setProductsQty = this.setProductsQty.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +46,13 @@ class ShoppingCart extends Component {
     this.setState({ shoppingCart: localProducts, totalPrice });
   }
 
+  setProductsQty(products) {
+    return products.reduce(
+      (acc, product) => acc + product.quantity,
+      0,
+    );
+  }
+
   removeProduct({ target }) {
     const {
       parentElement: {
@@ -53,6 +61,8 @@ class ShoppingCart extends Component {
     } = target;
     const localProducts = getProductsFromLocalStorage();
     const filteredItems = localProducts.filter((p) => p.id !== productId);
+    const productsQty = this.setProductsQty(filteredItems);
+    localStorage.setItem('productsQty', productsQty);
     const totalPrice = filteredItems.reduce(
       (acc, { price, quantity }) => acc + price * quantity,
       0,

@@ -19,6 +19,7 @@ export default class ProductListItem extends Component {
     this.setProductQty = this.setProductQty.bind(this);
     this.handleProductQty = this.handleProductQty.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.setProductsQty = this.setProductsQty.bind(this);
   }
 
   handleChange({ target }) {
@@ -47,6 +48,13 @@ export default class ProductListItem extends Component {
     return product;
   }
 
+  setProductsQty(products) {
+    return products.reduce(
+      (acc, product) => acc + product.quantity,
+      0,
+    );
+  }
+
   setProductQty({ target }) {
     const { id, title, price, thumbnail, getTotalPrice } = this.props;
     const localProducts = getProductsFromLocalStorage();
@@ -55,12 +63,16 @@ export default class ProductListItem extends Component {
     if (!foundProduct) {
       const productDataToAdd = { id, title, price, thumbnail, quantity: 1 };
       const localProductsUpdated = [...localProducts, productDataToAdd];
+      const productsQty = this.setProductsQty(localProductsUpdated);
+      localStorage.setItem('productsQty', productsQty);
       setProductsToLocalStorage(localProductsUpdated);
     } else {
       const { testid } = target.dataset;
       if (testid === 'product-decrease-quantity') {
         const localProductsUpdated = localProducts
           .map((p) => this.handleProductQty(p, foundProduct, 'decrease'));
+        const productsQty = this.setProductsQty(localProductsUpdated);
+        localStorage.setItem('productsQty', productsQty);
         setProductsToLocalStorage(localProductsUpdated);
         if (getTotalPrice) {
           getTotalPrice();
@@ -68,6 +80,8 @@ export default class ProductListItem extends Component {
       } else {
         const localProductsUpdated = localProducts
           .map((p) => this.handleProductQty(p, foundProduct, 'increase'));
+        const productsQty = this.setProductsQty(localProductsUpdated);
+        localStorage.setItem('productsQty', productsQty);
         setProductsToLocalStorage(localProductsUpdated);
         if (getTotalPrice) {
           getTotalPrice();
