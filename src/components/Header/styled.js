@@ -4,6 +4,9 @@ import { CartFill } from 'styled-icons/bootstrap';
 export const HeaderWrapper = styled.header`
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 999px;
   align-items: center;
   height: 3.25rem;
   border-bottom: 1px solid var(--borders);
