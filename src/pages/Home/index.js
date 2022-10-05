@@ -8,6 +8,8 @@ import {
   getCategories,
 } from '../../services/api';
 
+import * as S from './styled';
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -77,20 +79,24 @@ class Home extends Component {
 
     return (
       <Layout>
-        <span data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </span>
-        <Search
-          handleChange={ this.handleChange }
-          handleSubmit={ this.handleSubmit }
-          productQuery={ productQuery }
-        />
-        <ProductCategories
-          loading={ loading }
-          productsCategories={ productsCategories }
-          fetchProductsCategories={ this.handleClick }
-        />
-        <ProductsList loading={ loading } products={ products } />
+        <S.SearchWrapper>
+          <S.SearchInfo data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </S.SearchInfo>
+          <Search
+            handleChange={ this.handleChange }
+            handleSubmit={ this.handleSubmit }
+            productQuery={ productQuery }
+          />
+        </S.SearchWrapper>
+        <S.ProductsWrapper>
+          <ProductCategories
+            loading={ loading }
+            productsCategories={ productsCategories }
+            fetchProductsCategories={ this.handleClick }
+          />
+          <ProductsList loading={ loading } products={ products } />
+        </S.ProductsWrapper>
       </Layout>
     );
   }
