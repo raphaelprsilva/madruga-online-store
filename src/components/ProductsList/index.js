@@ -5,6 +5,7 @@ import {
   setProductsToLocalStorage,
 } from '../../services/localStorageProducts';
 import ProductListItem from '../ProductListItem';
+import * as S from './styled';
 
 export default class ProductsList extends Component {
   componentDidMount() {
@@ -18,13 +19,13 @@ export default class ProductsList extends Component {
     const { loading, products } = this.props;
 
     return (
-      <section>
+      <S.ProductsListWrapper>
         {!loading ? (
-          <section>
+          <S.Wrapper>
             {!products.length ? (
               <span>Nenhum produto foi encontrado</span>
             ) : (
-              <div>
+              <S.ProductsWrapper>
                 {products.map(({ id, title, thumbnail, price }) => (
                   <ProductListItem
                     key={ id }
@@ -34,13 +35,13 @@ export default class ProductsList extends Component {
                     price={ price }
                   />
                 ))}
-              </div>
+              </S.ProductsWrapper>
             )}
-          </section>
+          </S.Wrapper>
         ) : (
           <div>loading...</div>
         )}
-      </section>
+      </S.ProductsListWrapper>
     );
   }
 }
