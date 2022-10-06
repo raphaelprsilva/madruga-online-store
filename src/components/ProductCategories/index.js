@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import * as S from './styled';
+
 class ProductCategories extends Component {
   render() {
     const { loading, productsCategories, fetchProductsCategories } = this.props;
 
     return (
-      <section>
+      <S.ProductCategoriesWrapper>
         {!loading ? (
-          <aside>
+          <S.ProductList>
             {productsCategories.map(({ id, name }) => (
               <div key={ id }>
                 <button
@@ -21,11 +23,11 @@ class ProductCategories extends Component {
                 </button>
               </div>
             ))}
-          </aside>
+          </S.ProductList>
         ) : (
           <span>loading...</span>
         )}
-      </section>
+      </S.ProductCategoriesWrapper>
     );
   }
 }
