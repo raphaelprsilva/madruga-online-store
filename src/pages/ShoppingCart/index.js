@@ -7,6 +7,7 @@ import {
   getProductsFromLocalStorage,
   setProductsToLocalStorage,
 } from '../../services/localStorageProducts';
+import * as S from './styled';
 
 class ShoppingCart extends Component {
   constructor(props) {
@@ -47,10 +48,7 @@ class ShoppingCart extends Component {
   }
 
   setProductsQty(products) {
-    return products.reduce(
-      (acc, product) => acc + product.quantity,
-      0,
-    );
+    return products.reduce((acc, product) => acc + product.quantity, 0);
   }
 
   removeProduct({ target }) {
@@ -82,38 +80,41 @@ class ShoppingCart extends Component {
 
     return (
       <Layout>
-        <section>
-          {shoppingCart.length
-            ? shoppingCart.map(({ id, title, thumbnail, price, quantity }) => (
-              <ProductListItem
-                key={ id }
-                id={ id }
-                title={ title }
-                price={ price }
-                thumbnail={ thumbnail }
-                qtyShoppingCart={ quantity }
-                removeItem={ this.removeProduct }
-                getTotalPrice={ this.getTotalPrice }
-                showDeleteProductButton
-                showHandleQuantityButtons
-              />
-            ))
-            : emptyCart}
-        </section>
-        <section>
-          <p>Total</p>
-          <span>{totalPrice}</span>
-        </section>
-        <section>
-          <Link to="/checkout">
-            <button
-              type="button"
-              data-testid="checkout-products"
-            >
-              Finalizar Compra
-            </button>
-          </Link>
-        </section>
+        <S.SectionsWrapper>
+          <S.CartItemsWrapper>
+            {shoppingCart.length
+              ? shoppingCart.map(
+                ({ id, title, thumbnail, price, quantity }) => (
+                  <ProductListItem
+                    key={ id }
+                    id={ id }
+                    title={ title }
+                    price={ price }
+                    thumbnail={ thumbnail }
+                    qtyShoppingCart={ quantity }
+                    removeItem={ this.removeProduct }
+                    getTotalPrice={ this.getTotalPrice }
+                    showDeleteProductButton
+                    showHandleQuantityButtons
+                  />
+                ),
+              )
+              : emptyCart}
+          </S.CartItemsWrapper>
+          <S.TotalWrapper>
+            <p>Total</p>
+            <span>
+              R$
+              {' '}
+              {totalPrice.toString().replace('.', ',')}
+            </span>
+            <Link to="/checkout">
+              <S.CheckoutButton type="button" data-testid="checkout-products">
+                Finalizar Compra
+              </S.CheckoutButton>
+            </Link>
+          </S.TotalWrapper>
+        </S.SectionsWrapper>
       </Layout>
     );
   }
