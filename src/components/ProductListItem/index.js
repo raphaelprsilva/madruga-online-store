@@ -7,6 +7,8 @@ import {
   getProductsFromLocalStorage,
 } from '../../services/localStorageProducts';
 
+import * as S from './styled';
+
 export default class ProductListItem extends Component {
   constructor(props) {
     super(props);
@@ -132,13 +134,13 @@ export default class ProductListItem extends Component {
       <button type="button" onClick={ removeItem }>Remover Produto</button>
     ) : ('');
     const renderAddProductCartButton = showAddProductToCardButton ? (
-      <button
+      <S.AddProduct
         onClick={ this.setProductQty }
         type="button"
         data-testid={ testIdAddToCard }
       >
         Adicionar ao carrinho
-      </button>
+      </S.AddProduct>
     ) : ('');
     const renderProductQuantity = showHandleQuantityButtons ? (
       <div>
@@ -161,13 +163,14 @@ export default class ProductListItem extends Component {
     ) : ('');
 
     return (
-      <div key={ id } data-testid="product" data-product-id={ id }>
-        <img src={ thumbnail } alt={ title } />
-        <p data-testid={ testIdProductName }>{title}</p>
-        <p>
+      <S.CardWrapper key={ id } data-testid="product" data-product-id={ id }>
+        <S.CardImage src={ thumbnail } alt={ title } />
+        <S.CardTitle data-testid={ testIdProductName }>{title}</S.CardTitle>
+        <S.CardPrice>
           R$
-          {price}
-        </p>
+          {' '}
+          {price.toString().replace('.', ',')}
+        </S.CardPrice>
         {renderQtyShoppingCart}
         {renderAvaliableQty}
         {renderProductQuantity}
@@ -176,7 +179,7 @@ export default class ProductListItem extends Component {
           Ver detalhes do produto
         </Link>
         {renderDeleteProductButton}
-      </div>
+      </S.CardWrapper>
     );
   }
 }
