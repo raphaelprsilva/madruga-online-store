@@ -114,6 +114,7 @@ export default class ProductListItem extends Component {
       showAddProductToCardButton,
       showHandleQuantityButtons,
       removeItem,
+      standardItem,
     } = this.props;
 
     const renderQtyShoppingCart = showProductsQty ? (
@@ -131,10 +132,17 @@ export default class ProductListItem extends Component {
       </div>
     ) : ('');
     const renderDeleteProductButton = showDeleteProductButton ? (
-      <button type="button" onClick={ removeItem }>Remover Produto</button>
+      <S.RemoveProduct
+        shoppingCart={ !standardItem }
+        type="button"
+        onClick={ removeItem }
+      >
+        Remover Produto
+      </S.RemoveProduct>
     ) : ('');
     const renderAddProductCartButton = showAddProductToCardButton ? (
       <S.AddProduct
+        shoppingCart={ !standardItem }
         onClick={ this.setProductQty }
         type="button"
         data-testid={ testIdAddToCard }
@@ -143,28 +151,33 @@ export default class ProductListItem extends Component {
       </S.AddProduct>
     ) : ('');
     const renderProductQuantity = showHandleQuantityButtons ? (
-      <div>
-        <button
+      <S.ProductsQtyWrapper>
+        <S.HandleQty
           type="button"
           data-testid="product-decrease-quantity"
           onClick={ this.setProductQty }
         >
           -
-        </button>
+        </S.HandleQty>
         <div data-testid="shopping-cart-product-quantity">{ productQuantity }</div>
-        <button
+        <S.HandleQty
           type="button"
           data-testid="product-increase-quantity"
           onClick={ this.setProductQty }
         >
           +
-        </button>
-      </div>
+        </S.HandleQty>
+      </S.ProductsQtyWrapper>
     ) : ('');
 
     return (
-      <S.CardWrapper key={ id } data-testid="product" data-product-id={ id }>
-        <S.CardImage src={ thumbnail } alt={ title } />
+      <S.CardWrapper
+        shoppingCart={ !standardItem }
+        key={ id }
+        data-testid="product"
+        data-product-id={ id }
+      >
+        <S.CardImage shoppingCart={ !standardItem } src={ thumbnail } alt={ title } />
         <S.CardTitle data-testid={ testIdProductName }>{title}</S.CardTitle>
         <S.CardPrice>
           R$
@@ -174,11 +187,13 @@ export default class ProductListItem extends Component {
         {renderQtyShoppingCart}
         {renderAvaliableQty}
         {renderProductQuantity}
-        {renderAddProductCartButton}
-        <Link to={ `/products/${id}` } data-testid="product-detail-link">
-          Ver detalhes do produto
-        </Link>
-        {renderDeleteProductButton}
+        <S.ButtonsWrapper shoppingCart={ !standardItem }>
+          {renderAddProductCartButton}
+          <Link to={ `/products/${id}` } data-testid="product-detail-link">
+            Ver detalhes do produto
+          </Link>
+          {renderDeleteProductButton}
+        </S.ButtonsWrapper>
       </S.CardWrapper>
     );
   }
@@ -197,6 +212,7 @@ ProductListItem.defaultProps = {
   showProductsQty: false,
   showAddProductToCardButton: true,
   showHandleQuantityButtons: false,
+  standardItem: false,
   removeItem: null,
   getTotalPrice: null,
 };
@@ -214,6 +230,7 @@ ProductListItem.propTypes = {
   showProductsQty: PropTypes.bool,
   showAddProductToCardButton: PropTypes.bool,
   showHandleQuantityButtons: PropTypes.bool,
+  standardItem: PropTypes.bool,
   removeItem: PropTypes.func,
   getTotalPrice: PropTypes.func,
 };
