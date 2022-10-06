@@ -33,6 +33,7 @@ export default class ProductsList extends Component {
                     title={ title }
                     thumbnail={ thumbnail }
                     price={ price }
+                    standardItem
                   />
                 ))}
               </S.ProductsWrapper>

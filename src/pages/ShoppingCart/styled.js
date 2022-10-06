@@ -4,6 +4,8 @@ import { AddProduct } from '../../components/ProductListItem/styled';
 export const SectionsWrapper = styled.div`
   width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 `;
 
