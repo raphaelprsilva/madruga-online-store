@@ -125,11 +125,10 @@ export default class ProductListItem extends Component {
       </span>
     ) : ('');
     const renderAvaliableQty = avaliableQty ? (
-      <div>
-        Quantidade Disponível:
-        {' '}
-        {avaliableQty}
-      </div>
+      <S.AvaliableQtyWrapper>
+        <div>Quantidade Disponível</div>
+        <div>{avaliableQty}</div>
+      </S.AvaliableQtyWrapper>
     ) : ('');
     const renderDeleteProductButton = showDeleteProductButton ? (
       <S.RemoveProduct

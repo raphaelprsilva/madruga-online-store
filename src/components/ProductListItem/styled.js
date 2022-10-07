@@ -93,10 +93,24 @@ export const ButtonsWrapper = styled.div`
   height: ${(props) => (props.shoppingCart ? '120px' : '40px')};
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   a {
+    padding: 1rem 0;
+  }
+`;
+
+export const AvaliableQtyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 170px;
+  padding: 0 0.5rem;
+
+  div {
+    text-align: center;
     padding: 0.5rem 0;
   }
 `;
