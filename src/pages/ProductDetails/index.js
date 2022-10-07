@@ -4,21 +4,14 @@ import { Layout } from '../../components';
 import { getProductById } from '../../services/api';
 import ProductListItem from '../../components/ProductListItem/index';
 
-/*
-  [
-    { "idProduto": [{}, {}, {}]},
-    { "idProduto": [{}, {}, {}]},
-    { "idProduto": [{}, {}, {}]},
-    { "idProduto": [{}, {}, {}]},
-  ]
-*/
-
 import {
   getProductsFromLocalStorage,
   getRatingsFromLocalStorage,
   setRatingsToLocalStorage,
 } from '../../services/localStorageProducts';
 import StarRating from '../../components/StarRating';
+
+import * as S from './styled';
 
 export default class ProductDetails extends Component {
   constructor(props) {
@@ -51,9 +44,7 @@ export default class ProductDetails extends Component {
         match: { params },
       } = this.props;
       const { productId } = params;
-      const filteredRatings = localRatings.filter(
-        (r) => r.id === productId,
-      );
+      const filteredRatings = localRatings.filter((r) => r.id === productId);
       this.setState({ ratings: filteredRatings });
     }
   }
@@ -75,6 +66,9 @@ export default class ProductDetails extends Component {
       const userRating = { id: productId, email, rating, comment };
       this.setState((prevState) => ({
         ratings: [...prevState.ratings, userRating],
+        email: '',
+        rating: 0,
+        comment: '',
       }));
       const newRatings = localRatings.concat(userRating);
       setRatingsToLocalStorage(newRatings);
@@ -108,7 +102,7 @@ export default class ProductDetails extends Component {
 
     return (
       <Layout>
-        <section>
+        <S.ProductDetailsContainer>
           {!loading ? (
             <ProductListItem
               key={ id }
@@ -123,28 +117,25 @@ export default class ProductDetails extends Component {
           ) : (
             <div>loading...</div>
           )}
-        </section>
-        <section>
-          <h2>Avaliações</h2>
-          <form onSubmit={ this.handleSubmit }>
-            <label htmlFor="email">
-              Email:
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={ email }
-                onChange={ this.handleChange }
-                data-testid="product-detail-email"
-                placeholder="Digite seu email"
-              />
-            </label>
-            <div>
-              Avaliação:
+        </S.ProductDetailsContainer>
+        <S.RatingsWrapper>
+          <S.Title>Avalie o produto</S.Title>
+          <S.FormWrapper onSubmit={ this.handleSubmit }>
+            <S.Input
+              type="email"
+              id="email"
+              name="email"
+              value={ email }
+              onChange={ this.handleChange }
+              data-testid="product-detail-email"
+              placeholder="Digite seu email"
+            />
+            <S.UserRatingWrapper>
+              <div>Avaliação </div>
               <StarRating rating={ rating } setRating={ this.setRating } />
-            </div>
-            <label htmlFor="comment">
-              Comentário:
+            </S.UserRatingWrapper>
+            <S.UserComment htmlFor="comment">
+              Comentário
               <textarea
                 id="comment"
                 name="comment"
@@ -152,32 +143,38 @@ export default class ProductDetails extends Component {
                 onChange={ this.handleChange }
                 data-testid="product-detail-evaluation"
               />
-            </label>
-            <button type="submit" data-testid="submit-review-btn">
+            </S.UserComment>
+            <S.RatingButton type="submit" data-testid="submit-review-btn">
               Avaliar
-            </button>
-          </form>
-        </section>
-        <section>
+            </S.RatingButton>
+          </S.FormWrapper>
+        </S.RatingsWrapper>
+        <S.UsersRatingsWrapper>
+          <S.Title>Avaliações dos usuários</S.Title>
           {ratings.length > 0
             && ratings.map((r, index) => (
-              <div key={ index }>
-                <div>
-                  <div>E-mail:</div>
-                  <div>{r.email}</div>
-                </div>
-                <div>
-                  <div>Avaliação:</div>
-                  <div>{r.rating}</div>
-                  <div>/ 5</div>
-                </div>
-                <div>
+              <S.UserRating key={ index }>
+                <S.UserMailRating>
+                  <S.UserMailRatingItem>
+                    <div>E-mail:</div>
+                    <div>{r.email}</div>
+                  </S.UserMailRatingItem>
+                  <S.UserMailRatingItem>
+                    <div>Avaliação:</div>
+                    <div>
+                      {r.rating}
+                      {' '}
+                      / 5
+                    </div>
+                  </S.UserMailRatingItem>
+                </S.UserMailRating>
+                <S.UserMailRatingItem>
                   <div>Comentário:</div>
                   <div>{r.comment}</div>
-                </div>
-              </div>
+                </S.UserMailRatingItem>
+              </S.UserRating>
             ))}
-        </section>
+        </S.UsersRatingsWrapper>
       </Layout>
     );
   }
