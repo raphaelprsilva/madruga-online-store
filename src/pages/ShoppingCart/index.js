@@ -54,7 +54,9 @@ class ShoppingCart extends Component {
   removeProduct({ target }) {
     const {
       parentElement: {
-        dataset: { productId },
+        parentElement: {
+          dataset: { productId },
+        },
       },
     } = target;
     const localProducts = getProductsFromLocalStorage();
