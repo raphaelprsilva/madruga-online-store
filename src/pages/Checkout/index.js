@@ -1,37 +1,9 @@
 import React, { Component } from 'react';
-import ProductListItem from '../../components/ProductListItem/index';
-import Layout from '../../components/Layout/index';
+import ProductListItem from '../../components/ProductListItem';
+import Layout from '../../components/Layout';
 import { getProductsFromLocalStorage } from '../../services/localStorageProducts';
-
-const STATES = [
-  'Acre',
-  'Alagoas',
-  'Amapá',
-  'Amazonas',
-  'Bahia',
-  'Ceará',
-  'Distrito Federal',
-  'Espírito Santo',
-  'Goiás',
-  'Maranhão',
-  'Mato Grosso',
-  'Mato Grosso do Sul',
-  'Minas Gerais',
-  'Pará',
-  'Paraíba',
-  'Paraná',
-  'Pernambuco',
-  'Piauí',
-  'Rio de Janeiro',
-  'Rio Grande do Norte',
-  'Rio Grande do Sul',
-  'Rondônia',
-  'Roraima',
-  'Santa Catarina',
-  'São Paulo',
-  'Sergipe',
-  'Tocantins',
-];
+import * as S from './styled';
+import CheckoutForm from '../../components/CheckoutForm';
 
 export default class Checkout extends Component {
   constructor(props) {
@@ -77,104 +49,43 @@ export default class Checkout extends Component {
   render() {
     const { shoppingCart, totalPrice } = this.state;
 
+    const roundedTotalPrice = totalPrice.toFixed(2);
+
     return (
       <Layout>
-        <section>
-          {shoppingCart.length
-            && shoppingCart.map(({ id, title, thumbnail, price, quantity }) => (
-              <ProductListItem
-                key={ id }
-                id={ id }
-                title={ title }
-                price={ price }
-                thumbnail={ thumbnail }
-                qtyShoppingCart={ quantity }
-                getTotalPrice={ this.getTotalPrice }
-                showHandleQuantityButtons
-                showAddProductToCardButton={ false }
-              />
-            ))}
-        </section>
-        <section>
-          <p>Total</p>
-          <span>{totalPrice}</span>
-        </section>
-        <section>
-          <h2>Informações da Compa</h2>
-          <form onSubmit={ this.handleSubmit }>
-            <input
-              type="text"
-              name="email"
-              placeholder="Nome completo"
-              data-testid="checkout-fullname"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              data-testid="checkout-email"
-            />
-            <input
-              type="text"
-              name="cpf"
-              placeholder="CPF"
-              data-testid="checkout-cpf"
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Telefone"
-              data-testid="checkout-phone"
-            />
-            <input
-              type="text"
-              name="cep"
-              placeholder="CEP"
-              data-testid="checkout-cep"
-            />
-            <input
-              type="text"
-              name="address"
-              placeholder="Endereço"
-              data-testid="checkout-address"
-            />
-            <input
-              type="text"
-              name="complement"
-              placeholder="Complemento"
-              data-testid="checkout-complement"
-            />
-            <input
-              type="number"
-              name="number"
-              placeholder="Número"
-              data-testid="checkout-number"
-            />
-            <input
-              type="text"
-              name="city"
-              placeholder="Cidade"
-              data-testid="checkout-city"
-            />
-            <select name="" id="">
-              {STATES.map((state) => (
-                <option value={ state } key={ state }>
-                  {state}
-                </option>
+        <S.MainWrapper>
+          <S.ProductsWrapper>
+            <S.Title>Produtos do carrinho</S.Title>
+            {shoppingCart.length
+              && shoppingCart.map(({ id, title, thumbnail, price, quantity }) => (
+                <ProductListItem
+                  key={ id }
+                  id={ id }
+                  title={ title }
+                  price={ price }
+                  thumbnail={ thumbnail }
+                  qtyShoppingCart={ quantity }
+                  getTotalPrice={ this.getTotalPrice }
+                  showHandleQuantityButtons
+                  showAddProductToCardButton={ false }
+                />
               ))}
-            </select>
-            <h2>Método de pagamento</h2>
-            <label htmlFor="payment">
-              Cartão de crédito
-              <input type="radio" name="payment" id="payment" />
-            </label>
-            <label htmlFor="payment">
-              Boleto
-              <input type="radio" name="payment" id="payment" />
-            </label>
-            <button type="submit">Comprar</button>
-          </form>
-        </section>
+          </S.ProductsWrapper>
+          <S.FormTotalWrapper>
+            <S.TotalPriceWrapper>
+              <p>Total</p>
+              <span>
+                R$
+                {' '}
+                {roundedTotalPrice.replace('.', ',')}
+              </span>
+            </S.TotalPriceWrapper>
+            <S.CheckoutFormWrapper>
+              <S.Title>Informações da Compa</S.Title>
+              <CheckoutForm handleSubmit={ this.handleSubmit } />
+            </S.CheckoutFormWrapper>
+          </S.FormTotalWrapper>
+        </S.MainWrapper>
       </Layout>
     );
   }
