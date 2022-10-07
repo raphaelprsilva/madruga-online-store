@@ -78,6 +78,8 @@ class ShoppingCart extends Component {
       </span>
     );
 
+    const roundedTotalPrice = Math.round(totalPrice * 100) / 100;
+
     return (
       <Layout>
         <S.SectionsWrapper>
@@ -106,7 +108,7 @@ class ShoppingCart extends Component {
             <span>
               R$
               {' '}
-              {totalPrice.toString().replace('.', ',')}
+              {roundedTotalPrice.toString().replace('.', ',')}
             </span>
             <Link to="/checkout">
               <S.CheckoutButton type="button" data-testid="checkout-products">
