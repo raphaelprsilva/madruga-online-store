@@ -1,4 +1,4 @@
-<h1 align="center">🎧 madruga online store</h1>
+<h1 align="center">🏪 madruga online store</h1>
 
 ## :memo: Sobre o projeto
 
