@@ -89,7 +89,7 @@ O projeto ainda precisa de algumas melhorias de layout (`CSS`), mas nada que int
 
 ## 🔗 Link para acessar o projeto
 
-<a href="https://www.madruga-store.elraphael.com.br" target="_blank" rel="noopener">Madruga Online Store</a>
+<a href="http://www.madruga-store.elraphael.com.br/" target="_blank" rel="noopener">Madruga Online Store</a>
 
 ---
 
